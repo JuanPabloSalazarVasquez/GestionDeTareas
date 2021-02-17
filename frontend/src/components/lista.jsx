@@ -21,7 +21,7 @@ export default function Lista(props) {
                 className="todo-list stack-large stack-exception"
                 aria-labelledby="list-heading"
             >
-                <Tarea_card items={this.state.items}/>
+                <Tarea_card items={props.items} />
             </ul>
         </div>
     );

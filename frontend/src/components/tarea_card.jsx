@@ -60,44 +60,7 @@ export default function Tarea_card(props) {
     }))
 
     return (
-        <li className="todo stack-small">
-            <Card className={classes.root}>
-                <CardActionArea>
-                    <CardMedia
-                        component="img"
-                        alt="Contemplative Reptile"
-                        height="140"
-                        image="https://www.pinclipart.com/picdir/middle/379-3796154_profile-clipart-john-doe-circle-png-download.png"
-                        title="Tarea img"
-                    />
-                    <CardContent>
-                        <Typography gutterBottom variant="h5" component="h2">
-                            Titulo
-                        </Typography>
-                        <Typography variant="body2" color="textSecondary" component="p">
-                            Descripción
-                        </Typography>
-                        <Typography variant="body2" color="textSecondary" component="p">
-                            Prioridad
-                        </Typography>
-                        <Typography variant="body2" color="textSecondary" component="p">
-                            Fecha
-                        </Typography>
-                    </CardContent>
-                </CardActionArea>
-                <hr />
-                <CardActions>
-                    <div className="btn-group">
-                        <button className="btn">
-                            Editar
-                    </button>
-                        <button className="btn btn__danger">
-                            Borrar
-                    </button>
-                    </div>
-                </CardActions>
-            </Card>
-        </li>
+        <lista_tareas />
     );
 }
 

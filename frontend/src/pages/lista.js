@@ -18,7 +18,7 @@ class lista extends React.Component {
     render() {
         return (
             <>
-                <Lista />
+                <Lista items={this.state.items}/>
             </>
         );
     }
