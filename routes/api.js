@@ -2,13 +2,13 @@ const express = require('express');
 
 const router = express.Router();
 
-const BlogPost = require('../models/tarea');
+const Tarea = require('../models/tarea');
 
 
 // Routes
 router.get('/', (req, res) => {
 
-    BlogPost.find({  })
+    Tarea.find({  })
         .then((data) => {
             console.log('Data: ', data);
             res.json(data);
@@ -21,16 +21,16 @@ router.get('/', (req, res) => {
 router.post('/save', (req, res) => {
     const data = req.body;
 
-    const newBlogPost = new BlogPost(data);
+    const newTarea = new Tarea(data);
 
-    newBlogPost.save((error) => {
+    newTarea.save((error) => {
         if (error) {
-            res.status(500).json({ msg: 'Sorry, internal server errors' });
+            res.status(500).json({ msg: 'Error en el servidor' });
             return;
         }
-        // BlogPost
+        // Tarea
         return res.json({
-            msg: 'Your data has been saved!!!!!!'
+            msg: '¡Tarea guardada con éxito!'
         });
     });
 });
