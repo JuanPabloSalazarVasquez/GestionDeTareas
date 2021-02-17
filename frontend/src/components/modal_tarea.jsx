@@ -48,47 +48,50 @@ export default function Modal_tarea() {
                 Añadir tarea nueva
             </button>
 
-            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Añadir nueva tarea</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        Los campos marcados con * son obligatorios
+            <form className="item" action="/" method="post">
+                <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+                    <DialogTitle id="form-dialog-title">Añadir nueva tarea</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            Los campos marcados con * son obligatorios
           </DialogContentText>
-                    
-                    <Input autoFocus fullWidth name="nombre_input" placeholder="Nombre de la tarea *" inputProps={{ 'aria-label': 'description' }} />
 
-                    <Input fullWidth name="descripcion_input" placeholder="Descripción de la tarea" inputProps={{ 'aria-label': 'description' }} />
+                        <Input autoFocus fullWidth name="nombre_input" placeholder="Nombre de la tarea *" inputProps={{ 'aria-label': 'description' }} />
 
-                    <TextField
-                        id="filled-select-currency"
-                        select
-                        label="Prioridad *"
-                        value={prioridad}
-                        onChange={handleChange}
-                        helperText="Seleccione la prioridad de la tarea"
-                        variant="filled"
-                        name="prioridad_input"
-                        fullWidth
-                    >
-                        {prioridades.map((option) => (
-                            <MenuItem key={option.value} value={option.value}>
-                                {option.label}
-                            </MenuItem>
-                        ))}
-                    </TextField>
+                        <Input fullWidth name="descripcion_input" placeholder="Descripción de la tarea" inputProps={{ 'aria-label': 'description' }} />
 
-                    <Input fullWidth type="date" name="fecha_input" placeholder="Fecha de la tarea" inputProps={{ 'aria-label': 'description' }} />
+                        <TextField
+                            id="filled-select-currency"
+                            select
+                            label="Prioridad *"
+                            value={prioridad}
+                            onChange={handleChange}
+                            variant="filled"
+                            name="prioridad_input"
+                            fullWidth
+                        >
+                            {prioridades.map((option) => (
+                                <MenuItem key={option.value} value={option.value}>
+                                    {option.label}
+                                </MenuItem>
+                            ))}
+                        </TextField>
 
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose} color="primary">
-                        Cancelar
+                        <Input fullWidth type="date" name="fecha_input" placeholder="Fecha de la tarea" inputProps={{ 'aria-label': 'description' }} />
+
+                        <Input fullWidth type="file" accept="image/png, image/jpeg, image/jpg" name="imagen_input" placeholder="Imagen de la tarea" inputProps={{ 'aria-label': 'description' }} />
+
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose} color="primary">
+                            Cancelar
           </Button>
-                    <Button id="b" type="submit" onClick={handleClose} color="primary">
-                        Añadir tarea
+                        <Button id="b" type="submit" onClick={handleClose} color="primary">
+                            Añadir tarea
           </Button>
-                </DialogActions>
-            </Dialog>
+                    </DialogActions>
+                </Dialog>
+            </form>
         </div>
     );
 }
