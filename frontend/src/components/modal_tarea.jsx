@@ -84,7 +84,7 @@ export default function Modal_tarea() {
                     <Button onClick={handleClose} color="primary">
                         Cancelar
           </Button>
-                    <Button onClick={handleClose} color="primary">
+                    <Button id="b" type="submit" onClick={handleClose} color="primary">
                         Añadir tarea
           </Button>
                 </DialogActions>

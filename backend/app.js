@@ -76,11 +76,11 @@ app.get("/", function (req, res) {
 })
 
 app.post("/", function (req, res) {
-    const tareaImagen = req.body.i;
-    const tareaName = req.body.n;
-    const tareaDescripcion = req.body.d;
-    const tareaPrioridad = req.body.p;
-    const tareaFecha = req.body.f;
+    const tareaImagen = req.body.imagen_input;
+    const tareaName = req.body.nombre_input;
+    const tareaDescripcion = req.body.descripcion_input;
+    const tareaPrioridad = req.body.prioridad_input;
+    const tareaFecha = req.body.fecha_input;
 
     const tarea = new Tarea({
         imagen: tareaImagen,
