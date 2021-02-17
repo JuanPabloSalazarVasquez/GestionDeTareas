@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 8080; // Step 1
 const routes = require('./routes/api');
 
 // Step 2
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/pruebas', {
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/tareas_geek', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
