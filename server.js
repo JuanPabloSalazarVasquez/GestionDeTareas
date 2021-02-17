@@ -16,7 +16,7 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/pruebas',
 });
 
 mongoose.connection.on('connected', () => {
-    console.log('Mongoose is connected!!!!');
+    console.log('¡Base de datos conectada!');
 });
 
 // Data parsing
@@ -24,7 +24,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // Step 3
-
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static('client/build'));
 }
