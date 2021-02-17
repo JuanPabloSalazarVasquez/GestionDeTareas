@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 //Paginas inicio
 import Lista from './pages/lista';
+import App from './App'
 //Paginas fin
 
 
@@ -12,7 +13,7 @@ ReactDOM.render(
     <Router>
       <Switch>
         <Route path="/" exact>
-          <Lista />
+          <App />
         </Route>
       </Switch>
     </Router>

@@ -1,31 +1,37 @@
 import React from 'react';
 import axios from 'axios';
 
+import Lista from './pages/lista';
 
-import './App.css';
+//componentes inicio
+import Modal_tarea from './components/modal_tarea';
+import Tarea_card from './components/tarea_card';
+//componentes fin
 
 class App extends React.Component {
-
   state = {
-    title: '',
-    body: '',
+    imagen: '',
+    nombre: '',
+    descripcion: '',
+    prioridad: '',
+    fecha: '',
     posts: []
   };
 
   componentDidMount = () => {
-    this.getBlogPost();
+    this.getTareas();
   };
 
 
-  getBlogPost = () => {
+  getTareas = () => {
     axios.get('/api')
       .then((response) => {
         const data = response.data;
         this.setState({ posts: data });
-        console.log('Data has been received!!');
+        console.log('Datos recibidos.');
       })
       .catch(() => {
-        alert('Error retrieving data!!!');
+        alert('¡Error al recibir los datos!');
       });
   }
 
@@ -39,8 +45,11 @@ class App extends React.Component {
     event.preventDefault();
 
     const payload = {
-      title: this.state.title,
-      body: this.state.body
+      imagen: this.state.imagen,
+      nombre: this.state.nombre,
+      descripcion: this.state.descripcion,
+      prioridad: this.state.prioridad,
+      fecha: this.state.fecha,
     };
 
 
@@ -50,31 +59,35 @@ class App extends React.Component {
       data: payload
     })
       .then(() => {
-        console.log('Data has been sent to the server');
+        console.log('Datos enviados al servidor.');
         this.resetUserInputs();
-        this.getBlogPost();
+        this.getTareas();
       })
       .catch(() => {
-        console.log('Internal server error');
+        console.log('Error en el servidor');
       });;
   };
 
   resetUserInputs = () => {
     this.setState({
-      title: '',
-      body: ''
+      imagen: '',
+      nombre: '',
+      descripcion: '',
+      prioridad: '',
+      fecha: ''
     });
   };
 
-  displayBlogPost = (posts) => {
+  displayTareas = (tareas) => {
 
-    if (!posts.length) return null;
+    if (!tareas.length) return null;
 
 
-    return posts.map((post, index) => (
+    return tareas.map((tareas, index) => (
       <div key={index} className="blog-post__display">
-        <h3>{post.title}</h3>
-        <p>{post.body}</p>
+        <h3>{tareas.title}</h3>
+        <p>{tareas.body}</p>
+
       </div>
     ));
   };
@@ -84,12 +97,33 @@ class App extends React.Component {
     console.log('State: ', this.state);
 
     //JSX
-    return(
+    return (
       <div className="app">
+        {/*
+        <div className="todoapp stack-large">
+          <h1>Tareas Geek</h1>
+
+          <Modal_tarea />
+
+          <h2 id="list-heading">
+            3 tasks remaining
+        </h2>
+          <ul
+            role="list"
+            className="todo-list stack-large stack-exception"
+            aria-labelledby="list-heading"
+          >
+            <Tarea_card items={props.items} />
+          </ul>
+        </div>
+        */}
+
+        {/* QWERTY */}
+
         <h2>Welcome to the best app ever</h2>
         <form onSubmit={this.submit}>
           <div className="form-input">
-            <input 
+            <input
               type="text"
               name="title"
               placeholder="Title"
@@ -106,7 +140,7 @@ class App extends React.Component {
               value={this.state.body}
               onChange={this.handleChange}
             >
-              
+
             </textarea>
           </div>
 
@@ -114,7 +148,7 @@ class App extends React.Component {
         </form>
 
         <div className="blog-">
-          {this.displayBlogPost(this.state.posts)}
+          {this.displayTareas(this.state.posts)}
         </div>
       </div>
     );
