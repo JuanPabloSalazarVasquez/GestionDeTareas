@@ -21,6 +21,8 @@ router.get('/', (req, res) => {
 router.post('/save', (req, res) => {
     const data = req.body;
 
+    console.log("Data: " + data);
+
     const newTarea = new Tarea(data);
 
     newTarea.save((error) => {

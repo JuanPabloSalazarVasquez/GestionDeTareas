@@ -18,11 +18,12 @@ import Typography from '@material-ui/core/Typography';
 //Material-ui inicio
 class App extends React.Component {
   state = {
-    imagen: '',
-    nombre: '',
-    descripcion: '',
-    prioridad: '',
-    fecha: '',
+    id: '', //Esto sólo se usa al editar, de resto es automatico
+    imagen: 'https://www.pinclipart.com/picdir/middle/379-3796154_profile-clipart-john-doe-circle-png-download.png',
+    nombre: 'Tarea sin título',
+    descripcion: 'No hay descripción',
+    prioridad: '1',
+    fecha: '2022/01/01',
     posts: []
   };
 
@@ -49,7 +50,6 @@ class App extends React.Component {
 
     console.log({ [name]: value });
   };
-
 
   submit = (event) => {
     event.preventDefault();
@@ -78,18 +78,40 @@ class App extends React.Component {
       });
   };
 
-  editTareas = (id) => {
+  setTareaActual = (tarea) => {
+    console.log('Tarea: ' + tarea);
+    this.state.id = tarea._id;
+    this.state.imagen = tarea.imagen;
+    this.state.nombre = tarea.nombre;
+    this.state.descripcion = tarea.descripcion;
+    this.state.prioridad = tarea.prioridad;
+    this.state.fecha = tarea.fecha;
+  }
+
+  editTareas = () => {
+    const id = this.state.id;
+
+    const payload = {
+      imagen: this.state.imagen,
+      nombre: this.state.nombre,
+      descripcion: this.state.descripcion,
+      prioridad: this.state.prioridad,
+      fecha: this.state.fecha
+    };
+
     axios({
       url: `/api/${id}`,
-      method: 'DELETE'
+      method: 'PUT',
+      data: payload
     })
       .then(() => {
-        console.log('Tarea borrada con exito.')
-        console.log(id);
+        console.log('Datos enviados al servidor.');
+        this.resetUserInputs();
         this.getTareas();
+        window.location.reload(false);
       })
       .catch(() => {
-        console.log('Ocurrió un error al editar la tarea, intente nuevamente.');
+        alert('Error en el servidor');
       });
   }
 
@@ -110,11 +132,11 @@ class App extends React.Component {
 
   resetUserInputs = () => {
     this.setState({
-      imagen: '',
-      nombre: '',
-      descripcion: '',
-      prioridad: '',
-      fecha: ''
+      imagen: 'https://www.pinclipart.com/picdir/middle/379-3796154_profile-clipart-john-doe-circle-png-download.png',
+      nombre: 'Tarea sin título',
+      descripcion: 'No hay descripción',
+      prioridad: '1',
+      fecha: '2022/01/01'
     });
   };
 
@@ -134,24 +156,24 @@ class App extends React.Component {
                 title="Tareas img"
               />
               <CardContent>
-                <Typography gutterBottom variant="h5" component="h2">
-                  <p>{tareas.nombre}</p>
+                <Typography gutterBottom variant="h2" component="h2">
+                  {tareas.nombre}
                 </Typography>
                 <Typography variant="body2" color="textSecondary" component="p">
-                  <p>{tareas.descripcion}</p>
+                  {tareas.descripcion}
                 </Typography>
                 <Typography variant="body2" color="textSecondary" component="p">
-                  <p>{tareas.prioridad}</p>
+                  {tareas.prioridad}
                 </Typography>
                 <Typography variant="body2" color="textSecondary" component="p">
-                  <p>{tareas.fecha}</p>
+                  {tareas.fecha}
                 </Typography>
               </CardContent>
             </CardActionArea>
             <hr />
             <CardActions>
               <div className="btn-group">
-                <button onClick={() => this.editTareas(tareas._id)} className="btn"> {/*HACER PARA EDIT LAS TAREAS*/}
+                <button onClick={() => this.setTareaActual(tareas)} data-bs-toggle="modal" data-bs-target="#editModal" className="btn"> {/*HACER PARA EDIT LAS TAREAS*/}
                     Editar
                 </button>
                 <button onClick={() => this.deleteTareas(tareas._id)} className="btn btn__danger">
@@ -166,9 +188,6 @@ class App extends React.Component {
   };
 
   render() {
-
-    console.log('State: ', this.state);
-
     //JSX
     return (
       <div className="app">
@@ -187,7 +206,7 @@ class App extends React.Component {
         </div>
 
 
-        {/*MODAL*/}
+        {/*MODAL POST*/}
 
         <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div className="modal-dialog modal-dialog-centered">
@@ -233,6 +252,59 @@ class App extends React.Component {
               <div className="modal-footer">
                 <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={this.resetUserInputs}>Cancelar</button>
                 <button type="button" className="btn btn-primary" onClick={this.submit}>Guardar tarea</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+        {/*MODAL EDIT*/}
+
+        <div className="modal fade" id="editModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h4 className="modal-title" id="exampleModalLabel">Añadir nueva tarea </h4>
+                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div className="modal-body">
+                {/*Cuerpo del modal*/}
+                <h5>Los campos marcados con * son obligatorios</h5>
+                <hr />
+                <div className="input-group mb-3">
+                  <span className="input-group-text" id="inputGroup-sizing-default">*</span>
+                  <input name="nombre" onChange={this.handleChange} type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" autoFocus placeholder="Nombre de la tarea *" />
+                </div>
+
+                <div className="input-group mb-3">
+                  <span className="input-group-text" id="inputGroup-sizing-default"></span>
+                  <input name="descripcion" onChange={this.handleChange} type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="Descripción de la tarea" />
+                </div>
+
+                <div className="input-group mb-3">
+                  <label className="input-group-text" htmlFor="inputGroupSelect02">*</label>
+                  <select name="prioridad" onChange={this.handleChange} className="form-select" id="inputGroupSelect02" placeholder="Selecciona la prioridad">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                  </select>
+                </div>
+
+                <div className="input-group mb-3">
+                  <span className="input-group-text" id="inputGroup-sizing-default">*</span>
+                  <input name="fecha" onChange={this.handleChange} type="date" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" />
+                </div>
+
+                <div className="input-group mb-3">
+                  <span className="input-group-text" id="inputGroup-sizing-default"></span>
+                  <input name="imagen" onChange={this.handleChange} type="file" accept="image/*" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" />
+                </div>
+                {/*Cuerpo del modal*/}
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={this.resetUserInputs}>Cancelar</button>
+                <button type="button" className="btn btn-primary" onClick={this.editTareas}>Guardar cambios</button>
               </div>
             </div>
           </div>
