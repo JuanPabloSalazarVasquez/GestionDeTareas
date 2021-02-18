@@ -1,11 +1,10 @@
 import React from 'react';
 import axios from 'axios';
 
-import Lista from './pages/lista';
+import './styles/styles.css'
 
 //componentes inicio
 import Modal_tarea from './components/modal_tarea';
-import Tarea_card from './components/tarea_card';
 //componentes fin
 
 //Material-ui inicio

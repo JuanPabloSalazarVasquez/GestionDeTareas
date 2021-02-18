@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 //Paginas inicio
-import Lista from './pages/lista';
 import App from './App'
 //Paginas fin
 
