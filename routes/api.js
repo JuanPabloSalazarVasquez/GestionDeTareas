@@ -1,10 +1,10 @@
 const express = require('express');
-const ObjectId = require('mongodb').ObjectId;
 
 const router = express.Router();
 
+//Establecer model
 const Tarea = require('../models/tarea');
-
+//Establecer model
 
 // Routes
 router.get('/', (req, res) => {
@@ -16,7 +16,7 @@ router.get('/', (req, res) => {
         .catch((error) => {
             console.log('error: ', error);
         });
-});
+}); /*Obtiene las tareas de la db */
 
 router.post('/save', (req, res) => {
     const data = req.body;
@@ -35,7 +35,7 @@ router.post('/save', (req, res) => {
             msg: '¡Tarea guardada con éxito!'
         });
     });
-});
+}); /*Petición para agregar tareas */
 
 router.put('/:id', async(req, res) => {
     const {imagen, nombre, descripcion, prioridad, fecha} = req.body;
@@ -54,7 +54,7 @@ router.put('/:id', async(req, res) => {
         }
 
     })
-})
+}) /*Petición para editar tareas según su id */
 
 router.delete('/:id', async (req, res) => {
     const id = req.params.id;
@@ -64,7 +64,7 @@ router.delete('/:id', async (req, res) => {
         msg: '¡Tarea eliminada con éxito!'
     })
     
-});
+}); /*Petición para borrar tareas según su id */
 
 
 

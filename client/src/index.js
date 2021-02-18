@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import App from './App'
 //Paginas fin
 
-
+//Establecer rutas
 ReactDOM.render(
   <React.StrictMode>
     <Router>

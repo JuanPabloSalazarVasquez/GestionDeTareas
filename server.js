@@ -5,11 +5,11 @@ const morgan = require('morgan');
 const path = require('path');
 
 const app = express();
-const PORT = process.env.PORT || 8080; // Step 1
+const PORT = process.env.PORT || 8080; // Establecer puerto
 
 const routes = require('./routes/api');
 
-// Step 2
+// Conectar al servidor de mongodb
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/tareas_geek', {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -19,21 +19,21 @@ mongoose.connection.on('connected', () => {
     console.log('¡Base de datos conectada!');
 });
 
-// Data parsing
+// Parseo de datos
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Step 3
+// Seleccionar la carpeta con los archivos para la app 
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static('client/build'));
 }
 
 
-// HTTP request logger
+// Definir ruta para peticiones http
 app.use(morgan('tiny'));
 app.use('/api', routes);
 
 
 
-
+//Avisar cuando esté todo listo
 app.listen(PORT, console.log(`Server is starting at ${PORT}`));

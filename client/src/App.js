@@ -1,21 +1,22 @@
 /*
   Version 1.0
 */
+
 import React from 'react';
 import axios from 'axios';
 
+//Css imports
 import './styles/styles.css'
+//Css imports
 
-//Material-ui inicio
-import { makeStyles } from '@material-ui/core/styles';
+//Material-ui imports
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-//Material-ui inicio
+//Material-ui imports
 class App extends React.Component {
   state = {
     id: '', //Esto sólo se usa al editar, de resto es automatico
@@ -25,12 +26,11 @@ class App extends React.Component {
     prioridad: '1',
     fecha: '2022/01/01',
     posts: []
-  };
+  }; /*Aquí se maneja la información de las tareas */
 
   componentDidMount = () => {
     this.getTareas();
-  };
-
+  }; /*Ejecuta getTareas al cargar la página */
 
   getTareas = () => {
     axios.get('/api')
@@ -42,15 +42,16 @@ class App extends React.Component {
       .catch(() => {
         alert('¡Error al recibir los datos!');
       });
-  }
+  } /*Obtiene las tareas de la db */
 
   handleChange = ({ target }) => {
     const { name, value } = target;
     this.setState({ [name]: value });
 
     console.log({ [name]: value });
-  };
+  }; /*Actualiza el this.state cada vez que se hace un cambio a un campo */
 
+  //Peticiones
   submit = (event) => {
     event.preventDefault();
 
@@ -76,7 +77,7 @@ class App extends React.Component {
       .catch(() => {
         console.log('Error en el servidor');
       });
-  };
+  }; /*Petición para agregar tareas */
 
   setTareaActual = (tarea) => {
     console.log('Tarea: ' + tarea);
@@ -86,7 +87,7 @@ class App extends React.Component {
     this.state.descripcion = tarea.descripcion;
     this.state.prioridad = tarea.prioridad;
     this.state.fecha = tarea.fecha;
-  }
+  } /*Establecer en this.state la información de la tarea a editar */
 
   editTareas = () => {
     const id = this.state.id;
@@ -113,7 +114,7 @@ class App extends React.Component {
       .catch(() => {
         alert('Error en el servidor');
       });
-  }
+  } /*Petición para editar tareas según su id, esta id llega por this.state en vez de por params */
 
   deleteTareas = (id) => {
     axios({
@@ -128,7 +129,8 @@ class App extends React.Component {
       .catch(() => {
         alert('Ocurrió un error al borrar la tarea, intente nuevamente.');
       });
-  }
+  } /*Petición para borrar tareas según su id */
+  //Peticiones
 
   resetUserInputs = () => {
     this.setState({
@@ -138,7 +140,7 @@ class App extends React.Component {
       prioridad: '1',
       fecha: '2022/01/01'
     });
-  };
+  }; /*Devuelve los campos a sus valores predeterminados */
 
   displayTareas = (tareas) => {
     if (!tareas.length) return null;
@@ -185,7 +187,7 @@ class App extends React.Component {
         </li>
       </div>
     ));
-  };
+  }; /*Hace un map a las tareas obtenidas con la función de getTareas */
 
   render() {
     //JSX
