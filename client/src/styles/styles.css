@@ -352,3 +352,17 @@ width: 12px;
 .round input[type="checkbox"]:checked + label:after {
   opacity: 1;
 }
+
+/*
+  Login y Register
+*/
+
+.titulo{
+  margin-bottom: 30px;
+}
+
+.sm-txt{
+  margin-top: 50px;
+  text-align: center;
+  font-size: 17px;
+}

@@ -3,11 +3,13 @@ const express = require('express');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 const path = require('path');
+const bodyParser = require("body-parser");
 
 const app = express();
 const PORT = process.env.PORT || 8080; // Establecer puerto
 
 const routes = require('./routes/api');
+const userRoutes = require('./routes/user')
 
 // Conectar al servidor de mongodb
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/tareas_geek', {
@@ -22,6 +24,8 @@ mongoose.connection.on('connected', () => {
 // Parseo de datos
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 // Seleccionar la carpeta con los archivos para la app 
 if (process.env.NODE_ENV === 'production') {
@@ -32,6 +36,7 @@ if (process.env.NODE_ENV === 'production') {
 // Definir ruta para peticiones http
 app.use(morgan('tiny'));
 app.use('/api', routes);
+app.use('/user', userRoutes);
 
 
 
