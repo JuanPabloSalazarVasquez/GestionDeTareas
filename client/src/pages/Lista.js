@@ -175,7 +175,7 @@ class Lista extends React.Component {
             <hr />
             <CardActions>
               <div className="btn-group">
-                <button onClick={() => this.setTareaActual(tareas)} data-bs-toggle="modal" data-bs-target="#editModal" className="btn"> {/*HACER PARA EDIT LAS TAREAS*/}
+                <button onClick={() => this.setTareaActual(tareas)} data-bs-toggle="modal" data-bs-target="#editModal" className="btn">
                     Editar
                 </button>
                 <button onClick={() => this.deleteTareas(tareas._id)} className="btn btn__danger">
@@ -219,10 +219,10 @@ class Lista extends React.Component {
               </div>
               <div className="modal-body">
                 {/*Cuerpo del modal*/}
-                <h5>Los campos marcados con * son obligatorios</h5>
+                <h5>Ingrese los datos de la tarea</h5>
                 <hr />
                 <div className="input-group mb-3">
-                  <span className="input-group-text" id="inputGroup-sizing-default">*</span>
+                  <span className="input-group-text" id="inputGroup-sizing-default"></span>
                   <input name="nombre" onChange={this.handleChange} type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" autoFocus placeholder="Nombre de la tarea *" />
                 </div>
 
@@ -232,7 +232,7 @@ class Lista extends React.Component {
                 </div>
 
                 <div className="input-group mb-3">
-                  <label className="input-group-text" htmlFor="inputGroupSelect02">*</label>
+                  <label className="input-group-text" htmlFor="inputGroupSelect02"></label>
                   <select name="prioridad" onChange={this.handleChange} className="form-select" id="inputGroupSelect02" placeholder="Selecciona la prioridad">
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -241,7 +241,7 @@ class Lista extends React.Component {
                 </div>
 
                 <div className="input-group mb-3">
-                  <span className="input-group-text" id="inputGroup-sizing-default">*</span>
+                  <span className="input-group-text" id="inputGroup-sizing-default"></span>
                   <input name="fecha" onChange={this.handleChange} type="date" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="Fecha límite de la tarea" />
                 </div>
 
@@ -267,25 +267,25 @@ class Lista extends React.Component {
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-header">
-                <h4 className="modal-title" id="exampleModalLabel">Añadir nueva tarea </h4>
+                <h4 className="modal-title" id="exampleModalLabel">Editar una tarea </h4>
                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div className="modal-body">
                 {/*Cuerpo del modal*/}
-                <h5>Los campos marcados con * son obligatorios</h5>
+                <h5>No es necesario que edite todos los campos</h5>
                 <hr />
                 <div className="input-group mb-3">
-                  <span className="input-group-text" id="inputGroup-sizing-default">*</span>
-                  <input name="nombre" onChange={this.handleChange} type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" autoFocus placeholder="Nombre de la tarea *" />
+                  <span className="input-group-text" id="inputGroup-sizing-default"></span>
+                  <input name="nombre" onChange={this.handleChange} type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" autoFocus placeholder='Nuevo título' />
                 </div>
 
                 <div className="input-group mb-3">
                   <span className="input-group-text" id="inputGroup-sizing-default"></span>
-                  <input name="descripcion" onChange={this.handleChange} type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="Descripción de la tarea" />
+                  <input name="descripcion" onChange={this.handleChange} type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder='Nueva descripción' />
                 </div>
 
                 <div className="input-group mb-3">
-                  <label className="input-group-text" htmlFor="inputGroupSelect02">*</label>
+                  <label className="input-group-text" htmlFor="inputGroupSelect02"></label>
                   <select name="prioridad" onChange={this.handleChange} className="form-select" id="inputGroupSelect02" placeholder="Selecciona la prioridad">
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -294,7 +294,7 @@ class Lista extends React.Component {
                 </div>
 
                 <div className="input-group mb-3">
-                  <span className="input-group-text" id="inputGroup-sizing-default">*</span>
+                  <span className="input-group-text" id="inputGroup-sizing-default"></span>
                   <input name="fecha" onChange={this.handleChange} type="date" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" />
                 </div>
 
