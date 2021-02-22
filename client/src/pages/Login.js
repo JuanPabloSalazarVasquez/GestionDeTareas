@@ -28,19 +28,17 @@ const Login = (props) => {
     })
       .then(() => {
         console.log('Datos enviados al servidor.');
-        console.log(payload);
 
         setRedirect(true);
       })
       .catch((error) => {
         console.log(error)
-        console.log(payload);;
       });
 
   }; /*Petición para agregar tareas */
 
   if (redirect) {
-    return <Redirect to="/lista" />;
+    return <Redirect to="/lista" usuario={payload} />;
   }
 
   return (

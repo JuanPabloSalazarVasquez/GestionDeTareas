@@ -38,3 +38,5 @@ app.use('/api', routes);
 
 //Avisar cuando esté todo listo
 app.listen(PORT, console.log(`Server is starting at ${PORT}`));
+
+module.exports = app;
