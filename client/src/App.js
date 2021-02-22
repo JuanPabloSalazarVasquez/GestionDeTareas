@@ -14,7 +14,7 @@ import Register from './pages/Register';
 function App() {
     const [nombre, setNombre] = useState('')
 
-    useEffect(() => {
+    /*useEffect(() => {
         (
             async () => {
                 const response = await fetch('/user/user', {
@@ -28,7 +28,7 @@ function App() {
                 setNombre(content.nombre);
             }
         )()
-    });
+    });*/
 
     return (
         <div className="App">

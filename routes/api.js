@@ -19,10 +19,10 @@ router.get('/usuarios', (req, res) => {
         });
 }); //Obtener todos los usuarios
 
-router.post('/register', async (req, res) => {
+router.post('/register', (req, res) => {
     const data = req.body;
 
-    let passwordHash = await bcryptjs.hash(data.password, 9);
+    let passwordHash = bcryptjs.hashSync(data.password, 9);
 
     data.password = passwordHash;
 
