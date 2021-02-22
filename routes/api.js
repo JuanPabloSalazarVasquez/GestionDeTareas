@@ -76,7 +76,6 @@ router.delete('/usuario/:id', async (req, res) => {
         msg: '¡Usuario eliminado con éxito!'
     })
 })
-
 //Usuarios
 
 // Routes
