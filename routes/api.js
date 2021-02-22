@@ -1,14 +1,87 @@
 const express = require('express');
-
+const bcryptjs = require("bcryptjs");
 const router = express.Router();
 
 //Establecer model
 const Tarea = require('../models/tarea');
+const Usuario = require("../models/usuario");
 //Establecer model
+
+//Usuarios
+router.get('/usuarios', (req, res) => {
+    Usuario.find({})
+        .then((data) => {
+            console.log('Data: ', data);
+            res.json(data);
+        })
+        .catch((error) => {
+            console.log('error: ', error);
+        });
+}); //Obtener todos los usuarios
+
+router.post('/register', async (req, res) => {
+    const data = req.body;
+
+    let passwordHash = await bcryptjs.hash(data.password, 9);
+
+    data.password = passwordHash;
+
+    const newUsuario = new Usuario(data);
+
+    newUsuario.save((error) => {
+        if (error) {
+            return res.status(500).json({ msg: 'Error en el servidor: ' + error });
+        } else {
+            return res.json({
+                message: 'Usuario guardado con éxito!',
+                passwordHash: passwordHash
+            });
+        }
+    });
+}) //Registrar usuario
+
+router.post('/login', async (req, res) => {
+    const data = req.body;
+
+    const datos = await Usuario.find({ email: data.email })
+        .catch((error) => {
+            return res.json({ message: 'Error obteniendo el usuario: ' + error });
+        });
+
+    const datadb = await JSON.parse(JSON.stringify(datos));
+
+    const compare = await bcryptjs.compare(data.password, datadb[0].password).catch((error) => {
+        return res.json({
+            message: 'Error al comparar: ' + error,
+            datas:  'Data: ' + data.password + 'Datadb: ' + datadb[0].password
+        });
+    })
+
+    if (compare) {
+        return res.json({
+            message: "Todo correcto!"
+        })
+    } else {
+        return res.json({
+            message: "No son iguales..."
+        })
+    }
+});//Login
+
+router.delete('/usuario/:id', async (req, res) => {
+    const id = req.params.id;
+
+    await Usuario.findByIdAndDelete(id);
+    return res.json({
+        msg: '¡Usuario eliminado con éxito!'
+    })
+})
+
+//Usuarios
 
 // Routes
 router.get('/', (req, res) => {
-    Tarea.find({  })
+    Tarea.find({})
         .then((data) => {
             console.log('Data: ', data);
             res.json(data);
@@ -37,10 +110,10 @@ router.post('/save', (req, res) => {
     });
 }); /*Petición para agregar tareas */
 
-router.put('/:id', async(req, res) => {
-    const {imagen, nombre, descripcion, prioridad, fecha} = req.body;
+router.put('/:id', async (req, res) => {
+    const { imagen, nombre, descripcion, prioridad, fecha } = req.body;
     const id = req.params.id;
-    
+
     await Tarea.findByIdAndUpdate(id, {
         $set: req.body
     }, (err, resultset) => {
@@ -59,11 +132,13 @@ router.put('/:id', async(req, res) => {
 router.delete('/:id', async (req, res) => {
     const id = req.params.id;
 
-    await Tarea.findByIdAndDelete(id);
-    return res.json({
-        msg: '¡Tarea eliminada con éxito!'
-    })
+    await Tarea.findByIdAndDelete(id).then(() => {
+        return res.json({
+            msg: '¡Tarea eliminada con éxito!'
+        })
+    });
     
+
 }); /*Petición para borrar tareas según su id */
 
 
