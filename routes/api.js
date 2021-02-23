@@ -80,7 +80,8 @@ router.delete('/usuario/:id', async (req, res) => {
 //Usuarios
 
 // Routes
-router.get('/', (req, res) => {
+router.get('/:id_usuario', (req, res) => {
+
     Tarea.find({})
         .then((data) => {
             console.log('Data: ', data);

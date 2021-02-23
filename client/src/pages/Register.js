@@ -1,8 +1,6 @@
-import React, { SyntheticEvent, useState } from 'react';
-import { Redirect } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios';
-
-import { Link } from "react-router-dom";
 
 //Css imports
 import '../styles/styles.css'

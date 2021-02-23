@@ -2,7 +2,7 @@
   Version 1.0
 */
 
-import React from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 
 //Css imports
@@ -17,26 +17,26 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 //Material-ui imports
-class Lista extends React.Component {
-  state = {
-    id: '', //Esto sólo se usa al editar, de resto es automatico
-    imagen: 'https://www.pinclipart.com/picdir/middle/379-3796154_profile-clipart-john-doe-circle-png-download.png',
-    nombre: 'Tarea sin título',
-    descripcion: 'No hay descripción',
-    prioridad: '1',
-    fecha: '2022/01/01',
-    posts: []
-  }; /*Aquí se maneja la información de las tareas */
 
-  componentDidMount = () => {
-    this.getTareas();
-  }; /*Ejecuta getTareas al cargar la página */
+const Lista = (props) => {
+  const [id, setId] = useState(''); //Esto sólo se usa al editar, de resto es automatico
+  const [imagen, setImagen] = useState('https://www.pinclipart.com/picdir/middle/379-3796154_profile-clipart-john-doe-circle-png-download.png');
+  const [nombre, setNombre] = useState('Tarea sin título');
+  const [descripcion, setDescripcion] = useState('No hay descripción');
+  const [prioridad, setPrioridad] = useState('1');
+  const [fecha, setFecha] = useState('2022/01/01');
+  const [posts, setPosts] = useState([]);
+  const user = JSON.stringify(props);
+  const usuario = props.usuario;
 
-  getTareas = () => {
+  const getTareas = () => {
+    console.log('props: ' + props);
+    console.log('user: ' + user);
+    console.log('usuario: ' + usuario);
     axios.get('/api')
       .then((response) => {
         const data = response.data;
-        this.setState({ posts: data });
+        setPosts( data );
         console.log('Datos recibidos.');
       })
       .catch(() => {
@@ -44,23 +44,16 @@ class Lista extends React.Component {
       });
   } /*Obtiene las tareas de la db */
 
-  handleChange = ({ target }) => {
-    const { name, value } = target;
-    this.setState({ [name]: value });
-
-    console.log({ [name]: value });
-  }; /*Actualiza el this.state cada vez que se hace un cambio a un campo */
-
   //Peticiones
-  submit = (event) => {
+  const submit = (event) => {
     event.preventDefault();
 
     const payload = {
-      imagen: this.state.imagen,
-      nombre: this.state.nombre,
-      descripcion: this.state.descripcion,
-      prioridad: this.state.prioridad,
-      fecha: this.state.fecha,
+      imagen: imagen,
+      nombre: nombre,
+      descripcion: descripcion,
+      prioridad: prioridad,
+      fecha: fecha,
     };
 
     axios({
@@ -70,34 +63,31 @@ class Lista extends React.Component {
     })
       .then(() => {
         console.log('Datos enviados al servidor.');
-        this.resetUserInputs();
-        this.getTareas();
-        window.location.reload(false); 
+        resetUserInputs();
+        getTareas();
+        window.location.reload(false);
       })
-      .catch(() => {
-        console.log('Error en el servidor');
+      .catch((error) => {
+        console.log('Error en el servidor: ' + error);
       });
   }; /*Petición para agregar tareas */
 
-  setTareaActual = (tarea) => {
-    console.log('Tarea: ' + tarea);
-    this.state.id = tarea._id;
-    this.state.imagen = tarea.imagen;
-    this.state.nombre = tarea.nombre;
-    this.state.descripcion = tarea.descripcion;
-    this.state.prioridad = tarea.prioridad;
-    this.state.fecha = tarea.fecha;
-  } /*Establecer en this.state la información de la tarea a editar */
+  const setTareaActual = (tarea) => {
+    setId(tarea._id);
+    setImagen(tarea.imagen);
+    setNombre(tarea.nombre);
+    setDescripcion(tarea.descripcion);
+    setPrioridad(tarea.prioridad);
+    setFecha(tarea.fecha);
+  } /*Establecer en state la información de la tarea a editar */
 
-  editTareas = () => {
-    const id = this.state.id;
-
+  const editTareas = () => {
     const payload = {
-      imagen: this.state.imagen,
-      nombre: this.state.nombre,
-      descripcion: this.state.descripcion,
-      prioridad: this.state.prioridad,
-      fecha: this.state.fecha
+      imagen: imagen,
+      nombre: nombre,
+      descripcion: descripcion,
+      prioridad: prioridad,
+      fecha: fecha
     };
 
     axios({
@@ -107,24 +97,23 @@ class Lista extends React.Component {
     })
       .then(() => {
         console.log('Datos enviados al servidor.');
-        this.resetUserInputs();
-        this.getTareas();
+        resetUserInputs();
+        getTareas();
         window.location.reload(false);
       })
       .catch(() => {
         alert('Error en el servidor');
       });
-  } /*Petición para editar tareas según su id, esta id llega por this.state en vez de por params */
+  } /*Petición para editar tareas según su id, esta id llega por state en vez de por params */
 
-  deleteTareas = (id) => {
+  const deleteTareas = (id) => {
     axios({
       url: `/api/${id}`,
       method: 'DELETE'
     })
       .then(() => {
         console.log('Tarea borrada con exito.')
-        console.log(id);
-        this.getTareas();
+        getTareas();
       })
       .catch(() => {
         alert('Ocurrió un error al borrar la tarea, intente nuevamente.');
@@ -132,17 +121,15 @@ class Lista extends React.Component {
   } /*Petición para borrar tareas según su id */
   //Peticiones
 
-  resetUserInputs = () => {
-    this.setState({
-      imagen: 'https://www.pinclipart.com/picdir/middle/379-3796154_profile-clipart-john-doe-circle-png-download.png',
-      nombre: 'Tarea sin título',
-      descripcion: 'No hay descripción',
-      prioridad: '1',
-      fecha: '2022/01/01'
-    });
+  const resetUserInputs = () => {
+      setImagen('https://www.pinclipart.com/picdir/middle/379-3796154_profile-clipart-john-doe-circle-png-download.png');
+      setNombre('Tarea sin título');
+      setDescripcion('No hay descripción');
+      setPrioridad('1');
+      setFecha('2022/01/01');
   }; /*Devuelve los campos a sus valores predeterminados */
 
-  displayTareas = (tareas) => {
+  const displayTareas = (tareas) => {
     if (!tareas.length) return null;
 
     return tareas.map((tareas, index) => (
@@ -175,10 +162,10 @@ class Lista extends React.Component {
             <hr />
             <CardActions>
               <div className="btn-group">
-                <button onClick={() => this.setTareaActual(tareas)} data-bs-toggle="modal" data-bs-target="#editModal" className="btn">
-                    Editar
+                <button onClick={() => setTareaActual(tareas)} data-bs-toggle="modal" data-bs-target="#editModal" className="btn">
+                  Editar
                 </button>
-                <button onClick={() => this.deleteTareas(tareas._id)} className="btn btn__danger">
+                <button onClick={() => deleteTareas(tareas._id)} className="btn btn__danger">
                   Borrar
                 </button>
               </div>
@@ -189,131 +176,129 @@ class Lista extends React.Component {
     ));
   }; /*Hace un map a las tareas obtenidas con la función de getTareas */
 
-  render() {
-    //JSX
-    return (
-      <div className="app">
-        <h1>¡Bienvenid@ a Tareas Geek!</h1>
+  window.onload = getTareas;
+  return (
+    <div className="app">
+      <h1>¡Bienvenid@ a Tareas Geek!</h1>
 
-        <button type="button" className="btn btn__primary btn__lg" data-bs-toggle="modal" data-bs-target="#exampleModal">
-          Añadir nueva tarea
+      <button type="button" className="btn btn__primary btn__lg" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Añadir nueva tarea
         </button>
 
-        <h2>
-          Quedan {this.state.posts.length} tareas
+      <h2>
+        Quedan {posts.length} tareas
         </h2>
 
-        <div className="blog-">
-          {this.displayTareas(this.state.posts)}
-        </div>
+      <div className="blog-">
+        {displayTareas(posts)}
+      </div>
 
 
-        {/*MODAL POST*/}
+      {/*MODAL POST*/}
 
-        <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h4 className="modal-title" id="exampleModalLabel">Añadir nueva tarea </h4>
-                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div className="modal-body">
-                {/*Cuerpo del modal*/}
-                <h5>Ingrese los datos de la tarea</h5>
-                <hr />
-                <div className="input-group mb-3">
-                  <span className="input-group-text" id="inputGroup-sizing-default"></span>
-                  <input name="nombre" onChange={this.handleChange} type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" autoFocus placeholder="Nombre de la tarea *" />
-                </div>
-
-                <div className="input-group mb-3">
-                  <span className="input-group-text" id="inputGroup-sizing-default"></span>
-                  <input name="descripcion" onChange={this.handleChange} type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="Descripción de la tarea" />
-                </div>
-
-                <div className="input-group mb-3">
-                  <label className="input-group-text" htmlFor="inputGroupSelect02"></label>
-                  <select name="prioridad" onChange={this.handleChange} className="form-select" id="inputGroupSelect02" placeholder="Selecciona la prioridad">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                  </select>
-                </div>
-
-                <div className="input-group mb-3">
-                  <span className="input-group-text" id="inputGroup-sizing-default"></span>
-                  <input name="fecha" onChange={this.handleChange} type="date" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="Fecha límite de la tarea" />
-                </div>
-
-                <div className="input-group mb-3">
-                  <span className="input-group-text" id="inputGroup-sizing-default"></span>
-                  <input name="imagen" onChange={this.handleChange} type="file" accept="image/*" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"  placeholder="Imagen de la tarea" />
-                </div>
-                {/*Cuerpo del modal*/}
-              </div>
-              <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={this.resetUserInputs}>Cancelar</button>
-                <button type="button" className="btn btn-primary" onClick={this.submit}>Guardar tarea</button>
-              </div>
+      <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h4 className="modal-title" id="exampleModalLabel">Añadir nueva tarea </h4>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-          </div>
-        </div>
-
-
-
-        {/*MODAL EDIT*/}
-
-        <div className="modal fade" id="editModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h4 className="modal-title" id="exampleModalLabel">Editar una tarea </h4>
-                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div className="modal-body">
+              {/*Cuerpo del modal*/}
+              <h5>Ingrese los datos de la tarea</h5>
+              <hr />
+              <div className="input-group mb-3">
+                <span className="input-group-text" id="inputGroup-sizing-default"></span>
+                <input name="nombre" onChange={e => setNombre(e.target.value)} type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" autoFocus placeholder="Nombre de la tarea *" />
               </div>
-              <div className="modal-body">
-                {/*Cuerpo del modal*/}
-                <h5>No es necesario que edite todos los campos</h5>
-                <hr />
-                <div className="input-group mb-3">
-                  <span className="input-group-text" id="inputGroup-sizing-default"></span>
-                  <input name="nombre" onChange={this.handleChange} type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" autoFocus placeholder='Nuevo título' />
-                </div>
 
-                <div className="input-group mb-3">
-                  <span className="input-group-text" id="inputGroup-sizing-default"></span>
-                  <input name="descripcion" onChange={this.handleChange} type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder='Nueva descripción' />
-                </div>
-
-                <div className="input-group mb-3">
-                  <label className="input-group-text" htmlFor="inputGroupSelect02"></label>
-                  <select name="prioridad" onChange={this.handleChange} className="form-select" id="inputGroupSelect02" placeholder="Selecciona la prioridad">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                  </select>
-                </div>
-
-                <div className="input-group mb-3">
-                  <span className="input-group-text" id="inputGroup-sizing-default"></span>
-                  <input name="fecha" onChange={this.handleChange} type="date" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" />
-                </div>
-
-                <div className="input-group mb-3">
-                  <span className="input-group-text" id="inputGroup-sizing-default"></span>
-                  <input name="imagen" onChange={this.handleChange} type="file" accept="image/*" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" />
-                </div>
-                {/*Cuerpo del modal*/}
+              <div className="input-group mb-3">
+                <span className="input-group-text" id="inputGroup-sizing-default"></span>
+                <input name="descripcion" onChange={e => setDescripcion(e.target.value)} type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="Descripción de la tarea" />
               </div>
-              <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={this.resetUserInputs}>Cancelar</button>
-                <button type="button" className="btn btn-primary" onClick={this.editTareas}>Guardar cambios</button>
+
+              <div className="input-group mb-3">
+                <label className="input-group-text" htmlFor="inputGroupSelect02"></label>
+                <select name="prioridad" onChange={e => setPrioridad(e.target.value)} className="form-select" id="inputGroupSelect02" placeholder="Selecciona la prioridad">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                </select>
               </div>
+
+              <div className="input-group mb-3">
+                <span className="input-group-text" id="inputGroup-sizing-default"></span>
+                <input name="fecha" onChange={e => setFecha(e.target.value)} type="date" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="Fecha límite de la tarea" />
+              </div>
+
+              <div className="input-group mb-3">
+                <span className="input-group-text" id="inputGroup-sizing-default"></span>
+                <input name="imagen" onChange={e => setImagen(e.target.value)} type="file" accept="image/*" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="Imagen de la tarea" />
+              </div>
+              {/*Cuerpo del modal*/}
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={resetUserInputs}>Cancelar</button>
+              <button type="button" className="btn btn-primary" onClick={submit}>Guardar tarea</button>
             </div>
           </div>
         </div>
       </div>
-    );
-  }
+
+
+
+      {/*MODAL EDIT*/}
+
+      <div className="modal fade" id="editModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h4 className="modal-title" id="exampleModalLabel">Editar una tarea </h4>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div className="modal-body">
+              {/*Cuerpo del modal*/}
+              <h5>No es necesario que edite todos los campos</h5>
+              <hr />
+              <div className="input-group mb-3">
+                <span className="input-group-text" id="inputGroup-sizing-default"></span>
+                <input name="nombre" onChange={e => setNombre(e.target.value)} type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" autoFocus placeholder='Nuevo título' />
+              </div>
+
+              <div className="input-group mb-3">
+                <span className="input-group-text" id="inputGroup-sizing-default"></span>
+                <input name="descripcion" onChange={e => setDescripcion(e.target.value)} type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder='Nueva descripción' />
+              </div>
+
+              <div className="input-group mb-3">
+                <label className="input-group-text" htmlFor="inputGroupSelect02"></label>
+                <select name="prioridad" onChange={e => setPrioridad(e.target.value)} className="form-select" id="inputGroupSelect02" placeholder="Selecciona la prioridad">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                </select>
+              </div>
+
+              <div className="input-group mb-3">
+                <span className="input-group-text" id="inputGroup-sizing-default"></span>
+                <input name="fecha" onChange={e => setFecha(e.target.value)} type="date" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" />
+              </div>
+
+              <div className="input-group mb-3">
+                <span className="input-group-text" id="inputGroup-sizing-default"></span>
+                <input name="imagen" onChange={e => setImagen(e.target.value)} type="file" accept="image/*" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" />
+              </div>
+              {/*Cuerpo del modal*/}
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={resetUserInputs}>Cancelar</button>
+              <button type="button" className="btn btn-primary" onClick={editTareas}>Guardar cambios</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 

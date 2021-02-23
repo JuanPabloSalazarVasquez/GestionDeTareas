@@ -9,7 +9,7 @@ import '../styles/styles.css'
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [usuario, setUsuario] = useState([]);
+  const [usuario, setUsuario] = useState('');
   const [redirect, setRedirect] = useState(false);
 
   const submit = async (e) => {
@@ -29,7 +29,8 @@ const Login = () => {
         JSON.stringify(response)
         if (response.data.message == '¡Todo correcto!') {
           console.log('Datos enviados al servidor.');
-          setUsuario(response.data.datos[0]);
+          const user = JSON.stringify(response.data.datos[0]);
+          setUsuario(user);
 
           setRedirect(true);
         }else{
@@ -44,7 +45,8 @@ const Login = () => {
   }; /*Petición para agregar tareas */
 
   if (redirect) {
-    return <Redirect to="/lista" usuario={usuario} />;
+    console.log(usuario);
+    return <Redirect to={{pathname:"/lista", state:{usuario: usuario}}} />;
   }
 
   return (

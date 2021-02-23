@@ -38,7 +38,7 @@ function App() {
                 <main>
                     <Route path="/" exact component={() => <Login setNombre={setNombre} />} />
                     <Route path="/register" exactc component={() => <Register />} />
-                    <Route path="/lista" exact component={() => <Lista nombre={nombre} />} />
+                    <Route path="/lista" exact component={() => <Lista />} />
                 </main>
             </BrowserRouter>
         </div>
