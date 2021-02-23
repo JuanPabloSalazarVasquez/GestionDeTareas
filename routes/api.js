@@ -19,7 +19,7 @@ router.get('/usuarios', (req, res) => {
         });
 }); //Obtener todos los usuarios
 
-router.post('/register', (req, res) => {
+router.post('/usuarios/register', (req, res) => {
     const data = req.body;
 
     let passwordHash = bcryptjs.hashSync(data.password, 9);
@@ -30,17 +30,17 @@ router.post('/register', (req, res) => {
 
     newUsuario.save((error) => {
         if (error) {
-            return res.status(500).json({ msg: 'Error en el servidor: ' + error });
+            return res.status(500).json({ message: 'Error en el servidor: ' + error });
         } else {
             return res.json({
-                message: 'Usuario guardado con éxito!',
-                passwordHash: passwordHash
+                message: '¡Usuario guardado con éxito!'
+                //passwordHash: passwordHash
             });
         }
     });
 }) //Registrar usuario
 
-router.post('/login', async (req, res) => {
+router.post('/usuarios/login', async (req, res) => {
     const data = req.body;
 
     const datos = await Usuario.find({ email: data.email })
@@ -53,17 +53,18 @@ router.post('/login', async (req, res) => {
     const compare = await bcryptjs.compare(data.password, datadb[0].password).catch((error) => {
         return res.json({
             message: 'Error al comparar: ' + error,
-            datas:  'Data: ' + data.password + 'Datadb: ' + datadb[0].password
+            //datas:  'Data: ' + data.password + 'Datadb: ' + datadb[0].password
         });
     })
 
     if (compare) {
         return res.json({
-            message: "Todo correcto!"
+            message: "¡Todo correcto!",
+            datos: datadb
         })
     } else {
         return res.json({
-            message: "No son iguales..."
+            message: "Usuario o contraseña incorrectos"
         })
     }
 });//Login

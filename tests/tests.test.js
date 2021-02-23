@@ -1,7 +1,8 @@
 const request = require('supertest');
 const faker = require('faker');
 const dateformat = require('dateformat');
-const app = require('../server')
+const app = require('../server');
+
 describe("Probar peticiones de usuarios", () => {
 
     it('Validar creación de usuarios', async () => {

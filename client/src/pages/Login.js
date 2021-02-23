@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 import axios from 'axios';
-
-import { Link } from "react-router-dom";
 
 //Css imports
 import '../styles/styles.css'
 //Css imports
 
-const Login = (props) => {
+const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [usuario, setUsuario] = useState([]);
   const [redirect, setRedirect] = useState(false);
 
   const submit = async (e) => {
@@ -22,14 +21,21 @@ const Login = (props) => {
     };
 
     axios({
-      url: '/api/login',
+      url: '/api/usuarios/login',
       method: 'POST',
       data: payload
     })
-      .then(() => {
-        console.log('Datos enviados al servidor.');
+      .then((response) => {
+        JSON.stringify(response)
+        if (response.data.message == '¡Todo correcto!') {
+          console.log('Datos enviados al servidor.');
+          setUsuario(response.data.datos[0]);
 
-        setRedirect(true);
+          setRedirect(true);
+        }else{
+          alert(response.data.message)
+        }
+
       })
       .catch((error) => {
         console.log(error)
@@ -38,7 +44,7 @@ const Login = (props) => {
   }; /*Petición para agregar tareas */
 
   if (redirect) {
-    return <Redirect to="/lista" usuario={payload} />;
+    return <Redirect to="/lista" usuario={usuario} />;
   }
 
   return (

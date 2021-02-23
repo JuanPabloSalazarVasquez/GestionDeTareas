@@ -9,7 +9,7 @@ import '../styles/styles.css'
 //Css imports
 
 const Register = () => {
-  const [nombre, setNombre] = useState('');
+  const [user, setUser] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [redirect, setRedirect] = useState(false);
@@ -18,22 +18,25 @@ const Register = () => {
     e.preventDefault();
 
     const payload = {
-      nombre: nombre,
+      user: user,
       email: email,
       password: password,
     };
 
     axios({
-      url: '/api/register',
+      url: '/api/usuarios/register',
       method: 'POST',
       data: payload
     })
-      .then(() => {
+      .then((response) => {
         console.log('Datos enviados al servidor.');
-        window.location.replace("/")
-        console.log(payload);
-
-        setRedirect(true);
+        JSON.stringify(response)
+        if (response.data.message == '¡Usuario guardado con éxito!') {
+          setRedirect(true);
+          
+        }else{
+          alert(response.data.message)
+        }
       })
       .catch((error) => {
         console.log(error)
@@ -60,7 +63,7 @@ const Register = () => {
           {/*Cuerpo del modal*/}
           <div className="input-group mb-3">
             <span className="input-group-text" id="inputGroup-sizing-default"></span>
-            <input name="nombre" onChange={e => setNombre(e.target.value)} type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" autoFocus placeholder="Ingrese su nombre de usuario" />
+            <input name="user" onChange={e => setUser(e.target.value)} type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" autoFocus placeholder="Ingrese su nombre de usuario" />
           </div>
 
           <div className="input-group mb-3">
