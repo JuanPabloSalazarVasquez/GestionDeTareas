@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios';
 
+
 //Css imports
 import '../styles/styles.css'
 //Css imports
@@ -12,9 +13,7 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const [redirect, setRedirect] = useState(false);
 
-  const submit = async (e) => {
-    e.preventDefault();
-
+  const submit = async () => {
     const payload = {
       user: user,
       email: email,
@@ -31,8 +30,7 @@ const Register = () => {
         JSON.stringify(response)
         if (response.data.message == '¡Usuario guardado con éxito!') {
           setRedirect(true);
-          
-        }else{
+        } else {
           alert(response.data.message)
         }
       })
@@ -42,6 +40,33 @@ const Register = () => {
       });
 
   }; /*Petición para agregar tareas */
+
+  const sendMail = async () => {
+    const payload = {
+      user: user,
+      email: email,
+      password: password,
+    };
+
+    axios({
+      url: '/api/send-mail',
+      method: 'POST',
+      data: payload
+    })
+      .then((response) => {
+        console.log('Datos enviados al servidor.');
+        JSON.stringify(response)
+        if (response.data.message == '¡Enviado!') {
+          console.log('¡Mensaje enviado!')
+        } else {
+          alert('¡Hubo un error!');
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+        console.log(payload);;
+      });
+  };
 
   if (redirect) {
     return <Redirect to="/" />;
@@ -77,7 +102,7 @@ const Register = () => {
           {/*Cuerpo del modal*/}
         </div>
         <div className="modal-footer">
-          <button type="submit" className="btn btn-primary" onClick={submit}>Confirmar</button>
+          <button type="submit" className="btn btn-primary" onClick={() => {submit(); sendMail()}}>Confirmar</button>
         </div>
       </div>
 
